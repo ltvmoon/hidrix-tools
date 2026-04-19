@@ -187,7 +187,20 @@ function formatPosts(posts: Post[], sourceType: string): string {
     ].join("\n");
   });
 
-  return header + "\n" + lines.join("\n\n");
+  // JSON for piping to content_analyzer
+  const jsonData = posts.map((p) => ({
+    text: p.text,
+    author: p.author,
+    url: p.url,
+    timestamp: p.timestamp,
+    reactions: p.reactions,
+    comments: p.comments,
+    shares: p.shares,
+    source_type: p.source_type,
+    platform: "facebook",
+  }));
+
+  return header + "\n" + lines.join("\n\n") + "\n\n---\n\n<json>\n" + JSON.stringify(jsonData, null, 2) + "\n</json>";
 }
 
 // ── Main execute ───────────────────────────────────────────

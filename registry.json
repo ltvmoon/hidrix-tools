@@ -197,7 +197,7 @@
     {
       "name": "content_analyzer",
       "category": "analyze",
-      "description": "Analyze posts for topic clusters, content patterns, posting time trends, and author leaderboard.",
+      "description": "Platform-aware content analysis: intent detection, topic clusters, format patterns, timing trends, author leaderboard. Auto-detects TikTok/Instagram/Facebook/X/LinkedIn.",
       "provider": "built-in",
       "cost": "free",
       "envVars": [],
@@ -206,8 +206,13 @@
         "feeds_from": [
           "content_scorer",
           "facebook_scraper",
+          "instagram_scraper",
+          "tiktok_search",
           "x_search",
-          "reddit_search"
+          "x_user_posts",
+          "reddit_search",
+          "linkedin_search",
+          "linkedin_profile"
         ]
       }
     },
@@ -246,14 +251,34 @@
     {
       "name": "tiktok_search",
       "category": "search",
-      "description": "Search TikTok videos with play counts, likes, and descriptions.",
-      "provider": "RapidAPI",
+      "description": "Search TikTok videos, user profiles, hashtags, or get video details. Full stats: plays, likes, comments, shares, saves, duration, music, hashtags.",
+      "provider": "RapidAPI (tiktok-api23)",
       "cost": "RapidAPI subscription",
       "envVars": [
         "RAPIDAPI_KEY"
       ],
+      "modes": ["search", "user_posts", "hashtag", "video_detail"],
       "chain": {
         "suggested_next": [
+          "content_scorer",
+          "content_analyzer"
+        ],
+        "feeds_from": []
+      }
+    },
+    {
+      "name": "instagram_scraper",
+      "category": "scrape",
+      "description": "Scrape Instagram profiles, hashtags, or search. Returns posts with likes, comments, views, content type (image/video/carousel/reel), and hashtags.",
+      "provider": "Apify",
+      "cost": "$1.50-5/1000 posts (Apify)",
+      "envVars": [
+        "APIFY_API_TOKEN"
+      ],
+      "modes": ["profile", "hashtag", "search"],
+      "chain": {
+        "suggested_next": [
+          "content_scorer",
           "content_analyzer"
         ],
         "feeds_from": []
@@ -305,6 +330,7 @@
       "alt_sources": [
         "reddit_subreddit_top",
         "facebook_scraper",
+        "instagram_scraper",
         "youtube_search",
         "tiktok_search"
       ]
@@ -316,6 +342,8 @@
       ],
       "alt_sources": [
         "x_user_posts",
+        "instagram_scraper(profile)",
+        "tiktok_search(user_posts)",
         "similarweb_traffic"
       ]
     },
@@ -337,6 +365,36 @@
       "alt_sources": [
         "x_search",
         "web_search"
+      ]
+    },
+    "tiktok_research": {
+      "description": "Research TikTok trends, creators, and hashtags with full engagement data",
+      "flow": [
+        "tiktok_search \u2192 content_scorer \u2192 content_analyzer"
+      ],
+      "alt_sources": [
+        "tiktok_search(user_posts)",
+        "tiktok_search(hashtag)"
+      ]
+    },
+    "instagram_research": {
+      "description": "Research Instagram profiles, hashtags, and content patterns",
+      "flow": [
+        "instagram_scraper \u2192 content_scorer \u2192 content_analyzer"
+      ],
+      "alt_sources": [
+        "instagram_scraper(profile)",
+        "instagram_scraper(hashtag)"
+      ]
+    },
+    "cross_platform_analysis": {
+      "description": "Compare content performance across TikTok, Instagram, and Facebook",
+      "flow": [
+        "tiktok_search + instagram_scraper + facebook_scraper \u2192 content_analyzer"
+      ],
+      "alt_sources": [
+        "x_search",
+        "linkedin_search"
       ]
     }
   }

@@ -20,7 +20,12 @@ interface ScoredPost {
   reactions: number;
   comments: number;
   shares: number;
+  views: number;
+  saves: number;
+  content_type: string;
+  hashtags: string[];
   source_type: string;
+  platform: string;
 }
 
 function computeScore(
@@ -95,7 +100,12 @@ async function execute(params: Record<string, any>): Promise<string> {
       reactions: Number(p.reactions) || 0,
       comments: Number(p.comments) || 0,
       shares: Number(p.shares) || 0,
+      views: Number(p.views) || 0,
+      saves: Number(p.saves) || 0,
+      content_type: p.content_type || "",
+      hashtags: p.hashtags || [],
       source_type: p.source_type || "",
+      platform: p.platform || "",
     };
   });
 
