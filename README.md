@@ -202,6 +202,7 @@ Tools are auto-skipped if their API keys are missing — only configure what you
 | `BRAVE_API_KEY` | web_search | 2,000 queries/month | [api.search.brave.com](https://api.search.brave.com) |
 | `GETXAPI_KEY` | x_search, x_thread_reader, x_user_posts | $0.001/call, no subscription | [getxapi.com](https://getxapi.com) |
 | `RAPIDAPI_KEY` | x_search (fallback), reddit_search, youtube_search, tiktok_search | Varies | [rapidapi.com](https://rapidapi.com) |
+| `SUPADATA_API_KEY` | youtube_channel (primary) | Paid from $9/mo | [supadata.ai](https://supadata.ai) |
 | `APIFY_API_TOKEN` | facebook_scraper (group/page/search) | $5/month credit | [console.apify.com](https://console.apify.com/settings/integrations) |
 | `META_ADS_ACCESS_TOKEN` | facebook_scraper (ads mode) | Free, unlimited | [facebook.com/ads/library/api](https://www.facebook.com/ads/library/api/) |
 
